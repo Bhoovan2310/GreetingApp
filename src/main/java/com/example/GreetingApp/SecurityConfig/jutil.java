@@ -3,8 +3,11 @@ package com.example.GreetingApp.SecurityConfig;
 import com.example.GreetingApp.model.AuthUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+@Component
 public class jutil {
     private final String JWT_SECRET = "qwertyuiopokijuhgfrdeszxcvghuikjhgfdszvbnjiolkjhgfdszxcvbnj";  // Replace with a secure secret key
 
