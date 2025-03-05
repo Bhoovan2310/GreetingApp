@@ -1,6 +1,7 @@
 package com.example.GreetingApp.service;
 
 import com.example.GreetingApp.DTO.AuthUserDTO;
+import com.example.GreetingApp.DTO.LoginDTO;
 import com.example.GreetingApp.DTO.ResponseDTO;
 import com.example.GreetingApp.SecurityConfig.jutil;
 import com.example.GreetingApp.model.AuthUser;
@@ -46,7 +47,26 @@ public class AuthenticationService {
         String token = jutil.generateToken(user);
 
         // Send Email Notification to the User
-        // emailService.sendEmailNotification(user.getEmail(), token);
+       
         return new ResponseDTO("success", "User registered successfully. A verification token has been sent to your email.");
     }
+
+    // Method for user login
+    public ResponseDTO login(LoginDTO loginDTO) {
+        // Find the user by email
+        AuthUser user = authUserRepository.findByEmail(loginDTO.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Verify the password
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            return new ResponseDTO("error", "Invalid password");
+        }
+
+        // Generate a new JWT token
+        String token = jutil.generateToken(user);
+
+
+        return new ResponseDTO("success", "User logged in successfully.", token);
+    }
+
 }

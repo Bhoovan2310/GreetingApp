@@ -9,6 +9,7 @@ public class jutil {
     private final String JWT_SECRET = "qwertyuiopokijuhgfrdeszxcvghuikjhgfdszvbnjiolkjhgfdszxcvbnj";  // Replace with a secure secret key
 
     // Method to generate a JWT token
+    @SuppressWarnings("deprecation")
     public String generateToken(AuthUser user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())

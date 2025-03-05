@@ -1,7 +1,7 @@
 package com.example.GreetingApp.controller;
 
 import com.example.GreetingApp.DTO.AuthUserDTO;
-
+import com.example.GreetingApp.DTO.LoginDTO;
 import com.example.GreetingApp.DTO.ResponseDTO;
 import com.example.GreetingApp.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -22,4 +22,10 @@ public class AuthController {
         return ResponseEntity.status(response.getStatus().equals("success") ? 200 : 400).body(response);
     }
 
+    // Endpoint for user login
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDTO> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
+        ResponseDTO response = authenticationService.login(loginDTO);
+        return ResponseEntity.status(response.getStatus().equals("success") ? 200 : 400).body(response);
+    }
 }
