@@ -1,7 +1,12 @@
 package com.example.GreetingApp.DTO;
 
+import lombok.Data;
+import lombok.Getter;
+
+@Data
 public class ResponseDTO {
 
+    // Getters and Setters
     private String status;
     private String message;
     private String token;
@@ -19,25 +24,12 @@ public class ResponseDTO {
         this.token = token;
     }
 
-    // Getters and Setters
-    public String getStatus() {
-        return status;
-    }
-
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public void setToken(String token) {

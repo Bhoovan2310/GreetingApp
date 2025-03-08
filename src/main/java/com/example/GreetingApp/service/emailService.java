@@ -1,13 +1,12 @@
 package com.example.GreetingApp.service;
 
-import org.hibernate.annotations.SecondaryRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class emailService {
+public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
@@ -35,4 +34,15 @@ public class emailService {
         mailSender.send(emailMessage);
         System.out.println("Login notification email successfully sent to: " + recipientEmail);
     }
+
+    public void sendPasswordChangedNotification(String email) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Password Changed Confirmation");
+        message.setText("Your password has been successfully changed. If you didn't request this, please contact support immediately.");
+        mailSender.send(message);
+        System.out.println("Main send success");
+    }
+
+
 }

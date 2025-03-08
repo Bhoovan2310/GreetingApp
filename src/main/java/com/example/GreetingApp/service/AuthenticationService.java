@@ -11,22 +11,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
 
     @Autowired
-    private AuthUserRepository authUserRepository;
+     AuthUserRepository authUserRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+     BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private emailService email;
+    EmailService emailService ;
 
     @Autowired
-    private jutil jutil;
-
-
+     jutil jutil;
 
     // Method for user registration
     @Transactional
@@ -34,7 +34,9 @@ public class AuthenticationService {
         // Check if the email already exists
         if (authUserRepository.findByEmail(authUserDTO.getEmail()).isPresent()) {
             return new ResponseDTO("error", "Email already in use");
+
         }
+
 
         // Create and save the user
         AuthUser user = new AuthUser();
@@ -50,10 +52,10 @@ public class AuthenticationService {
         String token = jutil.generateToken(user);
 
         // Send Email Notification to the User
-        email.sendEmailNotification(user.getEmail(), token);
+        emailService.sendEmailNotification(user.getEmail(), token);
+
         return new ResponseDTO("success", "User registered successfully. A verification token has been sent to your email.");
     }
-
     // Method for user login
     public ResponseDTO login(LoginDTO loginDTO) {
         // Find the user by email
@@ -69,9 +71,23 @@ public class AuthenticationService {
         String token = jutil.generateToken(user);
 
         // Send login notification (this could be an email or SMS)
-        email.sendLoginNotification(user.getEmail());
-
+        emailService.sendLoginNotification(user.getEmail());
         return new ResponseDTO("success", "User logged in successfully.", token);
+    }
+
+    public boolean changePassword(String email , String newPassword){
+        Optional<AuthUser> temp = authUserRepository.findByEmail(email);
+
+        if (temp.isPresent()){
+            AuthUser user = temp.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            authUserRepository.save(user);
+            //send the mail to user
+            emailService.sendPasswordChangedNotification(email);
+            return true;
+        }
+
+        return false;
     }
 
 
