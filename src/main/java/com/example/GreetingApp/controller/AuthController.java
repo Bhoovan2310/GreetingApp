@@ -1,9 +1,6 @@
 package com.example.GreetingApp.controller;
 
-import com.example.GreetingApp.DTO.AuthUserDTO;
-import com.example.GreetingApp.DTO.ForgotPasswordRequestDTO;
-import com.example.GreetingApp.DTO.LoginDTO;
-import com.example.GreetingApp.DTO.ResponseDTO;
+import com.example.GreetingApp.DTO.*;
 import com.example.GreetingApp.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,16 @@ public class AuthController {
             return ResponseEntity.ok().body("{\"message\": \"Password has been changed successfully!\"}");
         } else {
             return ResponseEntity.badRequest().body("{\"message\": \"Sorry! We cannot find the user email: " + email + "\"}");
+        }
+    }
+
+    @PutMapping("/resetPassword/{email}")
+    public ResponseEntity<?> resetPassword(@PathVariable String email, @RequestBody PasswordResetDTO request) {
+        boolean isUpdated = authenticationService.resetPassword(email, request.getCurrentPassword(), request.getNewPassword());
+        if (isUpdated) {
+            return ResponseEntity.ok().body("{\"message\": \"Password reset successfully!\"}");
+        } else {
+            return ResponseEntity.badRequest().body("{\"message\": \"Failed to reset password!\"}");
         }
     }
 }

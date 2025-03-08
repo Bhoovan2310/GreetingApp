@@ -44,5 +44,12 @@ public class EmailService {
         System.out.println("Main send success");
     }
 
+    public void sendPasswordResetNotification(String email) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Password Reset Confirmation");
+        message.setText("Dear User,\n\nYour password has been successfully changed. If you didn't request this, please contact support immediately.\n\nBest regards,\nThe Greeting App");
 
+        mailSender.send(message);
+    }
 }
